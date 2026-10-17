@@ -1,0 +1,13 @@
+# Local tooling and credentials
+.agents/
+.aws/
+.codex/
+
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
