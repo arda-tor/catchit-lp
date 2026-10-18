@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Showcase from '../components/Showcase.astro';
+import CatList from '../components/CatList.astro';
+import FaqText from '../components/FaqText.astro';
+import Cta from '../components/Cta.astro';
+import MerchantPanel from '../components/ui/MerchantPanel.astro';
+import DealTickets from '../components/ui/DealTickets.astro';
+import SignupDialog from '../components/ui/SignupDialog.astro';
+import { merchants as page } from '../data/merchants';
+import { SITE, abs } from '../config/site';
+import { graph, organization, website, mobileApp, merchantService, webPage, faqPage, ID } from '../lib/schema';
+
+const url = abs(page.path);
+const jsonLd = graph(
+  organization,
+  website,
+  mobileApp,
+  merchantService,
+  webPage({
+    url,
+    name: page.metaTitle,
+    description: page.description,
+    about: ID.merchantService,
+    breadcrumb: [
+      { name: SITE.name, url: abs('/') },
+      { name: 'İşletmeler İçin', url },
+    ],
+  }),
+  faqPage(url, page.faq.items),
+);
+const photos = [page.hero.photo, ...page.list.items.map((i) => i.photo)];
+---
+
+<Base title={page.metaTitle} description={page.description} path={page.path} markdownPath="/merchants.md" jsonLd={jsonLd} photos={photos}>
+  <Split page={page} wmSize="clamp(6rem, 15vw, 22rem)" wmSizePhone="21vw" />
+  <HowItWorks steps={page.steps} states={['form', 'live', 'verify']}>
+    <MerchantPanel />
+  </HowItWorks>
+  <Showcase showcase={page.showcase} stageHeight="420px">
+    <DealTickets />
+  </Showcase>
+  <CatList list={page.list} />
+  <FaqText faq={page.faq} />
+  <Cta cta={page.cta} id="kayit">
+    <SignupDialog />
+  </Cta>
+</Base>

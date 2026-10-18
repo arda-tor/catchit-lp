@@ -1,0 +1,83 @@
+---
+// Kahraman + giriş: solda sabit duran fotoğraf, sağda kayan okuma sütunu, ikisini kesen dev kelime.
+import type { MarketingPage } from '../data/types';
+import { photo } from '../lib/photos';
+
+interface Props {
+  page: MarketingPage;
+  /** Dev kelimenin masaüstü ve telefon boyutu; kelime uzunluğuna göre. */
+  wmSize?: string;
+  wmSizePhone?: string;
+}
+const { page, wmSize, wmSizePhone } = Astro.props;
+const { hero, intro } = page;
+const img = photo(hero.photo);
+const style = [wmSize && `--wm-size:${wmSize}`, wmSizePhone && `--wm-size-phone:${wmSizePhone}`].filter(Boolean).join(';');
+const isExternal = (href: string) => href.startsWith('http');
+---
+
+<section class="split" aria-labelledby="hero-title" style={style}>
+  <div class="split-media">
+    <figure class="split-photo">
+      <img src={img.file} width={img.width} height={img.height} alt={hero.photoAlt} fetchpriority="high" decoding="async" />
+    </figure>
+  </div>
+
+  <div class="split-col">
+    <div class="hero-top">
+      <nav class="nav" aria-label="Ana menü">
+        <ul>
+          <li><a class="link" href="#nasil">Nasıl çalışır</a></li>
+          <li><a class="link" href="#liste">{page.list.heading}</a></li>
+          <li><a class="link" href="#sorular">Sorular</a></li>
+          {hero.secondary && <li><a class="link" href={hero.secondary.href}>{hero.secondary.label}</a></li>}
+          <li><a class="link nav-action" href={hero.action.href}>{hero.action.label}</a></li>
+        </ul>
+        <details class="nav-menu">
+          <summary>Menü</summary>
+          <ul>
+            <li><a href="#nasil">Nasıl çalışır</a></li>
+            <li><a href="#liste">{page.list.heading}</a></li>
+            <li><a href="#sorular">Sorular</a></li>
+            {hero.secondary && <li><a href={hero.secondary.href}>{hero.secondary.label}</a></li>}
+          </ul>
+        </details>
+      </nav>
+    </div>
+
+    <div class="hero-text">
+      <p class="statement" data-rise style="--i:1">{hero.statement}</p>
+      <div class="actions" data-rise style="--i:2">
+        <a class="button" href={hero.action.href} rel={isExternal(hero.action.href) ? 'noopener' : undefined}>{hero.action.label}</a>
+      </div>
+    </div>
+
+    <section class="intro" aria-labelledby="intro-title" data-reveal>
+      <h2 id="intro-title" class="head" style="--i:0">{intro.heading}</h2>
+      {intro.figure && (
+        <div class="figure" style="--i:1">
+          <span class="value nums">{intro.figure.value}</span>
+          <span class="caption">{intro.figure.caption}</span>
+        </div>
+      )}
+      <div class="body" style="--i:2">{intro.body.map((p) => <p>{p}</p>)}</div>
+      {intro.facts && (
+        <dl class="facts" style="--i:3">
+          {intro.facts.map((f) => (<><dt>{f.term}</dt><dd>{f.detail}</dd></>))}
+        </dl>
+      )}
+      {intro.table && (
+        <table class="fees" style="--i:3">
+          <caption>{intro.table.caption}</caption>
+          <thead><tr><th scope="col">{intro.table.head[0]}</th><th scope="col" style="text-align:right">{intro.table.head[1]}</th></tr></thead>
+          <tbody>{intro.table.rows.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody>
+        </table>
+      )}
+    </section>
+  </div>
+
+  <h1 class="wordmark" id="hero-title">
+    <span class="scale"><span class="mask"><span data-line aria-hidden="true">{hero.word}</span></span></span>
+    <span class="sr-only">{hero.h1}</span>
+  </h1>
+</section>

@@ -1,0 +1,26 @@
+---
+// Çıktı dizini: sağda isimler, solda seçili isme ait uygulama ekranı. Ekranlar slot'tan gelir (.sheet).
+import type { MarketingPage } from '../data/types';
+interface Props { showcase: MarketingPage['showcase']; stageHeight?: string }
+const { showcase, stageHeight } = Astro.props;
+---
+
+<section class="section showcase" aria-labelledby="show-title" data-showcase style={stageHeight ? `--stage-h:${stageHeight}` : undefined}>
+  <div class="grid">
+    <div class="index" data-reveal>
+      <h2 id="show-title" class="sr-only">{showcase.heading}</h2>
+      <ul style="--i:0">
+        {showcase.items.map((it, i) => (
+          <li><button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-i={i}>{it.name}</button></li>
+        ))}
+      </ul>
+      <div class="note" style="--i:1">
+        {showcase.items.map((it, i) => <p data-note={i} hidden={i !== 0}>{it.text}</p>)}
+      </div>
+    </div>
+    <div class="sheet-stage">
+      <slot />
+      <p class="ui-note">Temsili görsel. Uygulamanın gerçek arayüzü farklılık gösterebilir.</p>
+    </div>
+  </div>
+</section>

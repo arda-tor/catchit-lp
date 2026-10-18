@@ -1,0 +1,15 @@
+---
+import { SITE } from '../../config/site';
+// Gerçek bir GET formu: yazılan işletme adı ve tür, kayıt sayfasına parametre olarak taşınır. Script gerekmez.
+---
+
+<form class="dialog" data-ui action={SITE.merchantSignup} method="get" aria-labelledby="signup-title">
+  <span class="dialog-title" id="signup-title">İşletmeni ekle</span>
+  <label class="field-ui"><span>İşletmenin adı</span><input class="input" name="isletme" value="Bäckerei Morgenrot" autocomplete="organization" required /></label>
+  <div class="seg" role="radiogroup" aria-label="İşletme türü">
+    <label><input type="radio" name="tur" value="yeme-icme" checked /><span>Kafe, fırın, restoran</span></label>
+    <label><input type="radio" name="tur" value="magaza-hizmet" /><span>Pazar, çiçekçi, diğer</span></label>
+  </div>
+  <button type="submit" class="ui-btn block">Ücretsiz kayıt ol</button>
+  <p class="ui-small" style="text-align:center">Kredi kartı istenmez. Kurulum, abonelik ve komisyon yok.</p>
+</form>

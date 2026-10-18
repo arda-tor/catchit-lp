@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Showcase from '../components/Showcase.astro';
+import CatList from '../components/CatList.astro';
+import FaqText from '../components/FaqText.astro';
+import Cta from '../components/Cta.astro';
+import PhoneDeals from '../components/ui/PhoneDeals.astro';
+import HomeSheets from '../components/ui/HomeSheets.astro';
+import StoreDialog from '../components/ui/StoreDialog.astro';
+import { home as page } from '../data/home';
+import { abs } from '../config/site';
+import { graph, organization, website, mobileApp, webPage, faqPage, ID } from '../lib/schema';
+
+const url = abs(page.path);
+const jsonLd = graph(
+  organization,
+  website,
+  mobileApp,
+  webPage({ url, name: page.metaTitle, description: page.description, about: ID.app }),
+  faqPage(url, page.faq.items),
+);
+const photos = [page.hero.photo, ...page.list.items.map((i) => i.photo)];
+---
+
+<Base title={page.metaTitle} description={page.description} path={page.path} markdownPath="/index.md" jsonLd={jsonLd} photos={photos}>
+  <Split page={page} wmSize="clamp(7rem, 18vw, 26rem)" wmSizePhone="27vw" />
+  <HowItWorks steps={page.steps} states={['list', 'code', 'done']}>
+    <PhoneDeals />
+  </HowItWorks>
+  <Showcase showcase={page.showcase}>
+    <HomeSheets />
+  </Showcase>
+  <CatList list={page.list} />
+  <FaqText faq={page.faq} />
+  <Cta cta={page.cta}>
+    <StoreDialog />
+  </Cta>
+</Base>

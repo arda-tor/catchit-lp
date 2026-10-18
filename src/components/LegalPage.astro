@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, abs } from '../config/site';
+import { loadLegal, type LegalSlug } from '../lib/legal';
+import { graph, organization, website, webPage } from '../lib/schema';
+
+interface Props { slug: LegalSlug }
+const { slug } = Astro.props;
+const { entry, html, headings } = await loadLegal(slug);
+const path = `/${slug}`;
+const url = abs(path);
+const updated = entry.data.updated.toISOString().slice(0, 10);
+const updatedHuman = entry.data.updated.toLocaleDateString('tr-TR', { dateStyle: 'long' });
+
+const jsonLd = graph(organization, website, {
+  ...webPage({
+    url,
+    name: entry.data.title,
+    description: entry.data.description,
+    breadcrumb: [
+      { name: SITE.name, url: abs('/') },
+      { name: entry.data.title, url },
+    ],
+  }),
+  dateModified: updated,
+});
+// Markdown tablolarını telefonda yatay kaydırılabilir kutuya al.
+const prose = html.replace(/<table>/g, '<div class="table-scroll"><table>').replace(/<\/table>/g, '</table></div>');
+---
+
+<Base
+  title={`${entry.data.title} | ${SITE.name}`}
+  description={entry.data.description}
+  path={path}
+  markdownPath={`/${slug}.md`}
+  jsonLd={jsonLd}
+  ogType="article"
+  bar
+>
+  <article class="legal">
+    <div class="legal-side">
+      <header>
+        <h1 data-rise style="--i:0">{entry.data.title}</h1>
+        <p class="meta" data-rise style="--i:1">Son güncelleme: <time datetime={updated}>{updatedHuman}</time></p>
+      </header>
+      <nav aria-label="İçindekiler" class="toc" data-rise style="--i:2">
+        <ol>{headings.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </nav>
+    </div>
+    <div class="prose" data-rise style="--i:3" set:html={prose} />
+  </article>
+</Base>

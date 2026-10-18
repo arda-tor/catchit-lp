@@ -1,0 +1,84 @@
+---
+// İşletme panelinden üç durum, ürünün gerçek "Kampanyalar" ekranına göre:
+// 1) kampanya formu: ürün, stok sınırı, indirim türü, canlı fiyat önizlemesi (gerçekten hesaplar, site.ts [data-preview])
+// 2) zamanlama: tekrarlama, haftanın günleri, saat aralığı, tarihler
+// 3) kampanya listesi. İşletme ve ürün adları örnektir.
+const days = [['Pzt', true], ['Sal', true], ['Çar', true], ['Per', true], ['Cum', true], ['Cmt', false], ['Paz', false]] as const;
+const repeat = [
+  { t: 'Tek seferlik', d: 'Belirli bir tarih aralığında bir kez', on: false },
+  { t: 'Her gün', d: 'Her gün aynı saat aralığında', on: false },
+  { t: 'Haftalık', d: 'Haftanın seçilen günlerinde', on: true },
+  { t: 'Aylık', d: 'Ayın seçilen günlerinde', on: false },
+];
+const list = [
+  { name: 'Ekşi mayalı ekmek', rep: 'Haftalık · Pzt–Cum 17.00–19.00', offer: '%40 indirim', date: '20.10.2026 · süresiz' },
+  { name: 'Elmalı turta', rep: 'Her gün · 18.00–19.00', offer: '1,00 € indirim', date: '20.10.2026 · süresiz' },
+  { name: 'Kruvasan', rep: 'Tek seferlik', offer: '%25 indirim', date: '24.10.2026 – 26.10.2026' },
+];
+---
+
+<div class="panel" data-ui aria-label="CatchIt işletme panelinden örnek ekran">
+  <div class="screen" data-s="form">
+    <div class="panel-head"><strong style="font-weight:500">Kampanya oluştur</strong><span class="ui-small">Bäckerei Morgenrot</span></div>
+
+    <div class="preview-grid" data-preview>
+      <div class="product">
+        <span class="product-name">Ekşi mayalı ekmek</span>
+        <label class="inline-field"><span class="ui-small">Fiyat</span><input class="input sm" name="price" inputmode="decimal" value="4,00" aria-label="Ürün fiyatı (€)" /><span class="suffix">€</span></label>
+      </div>
+
+      <div class="row-toggle">
+        <div><div>Stok sınırı</div><div class="ui-small">Kampanyada satışa çıkacak adet</div></div>
+        <span class="adet nums">14 adet</span>
+        <span class="toggle on" aria-hidden="true"></span>
+      </div>
+
+      <div class="seg" role="radiogroup" aria-label="İndirim türü">
+        <label><input type="radio" name="dtype" value="pct" checked /><span>% İndirim</span></label>
+        <label><input type="radio" name="dtype" value="fix" /><span>Sabit €</span></label>
+      </div>
+
+      <label class="inline-field wide"><span class="ui-small">İndirim</span><input class="input sm" name="amount" inputmode="decimal" value="40" aria-label="İndirim miktarı" /><span class="suffix" data-suffix>%</span></label>
+
+      <div class="preview" aria-live="polite">
+        <span class="ui-small">Fiyat önizlemesi</span>
+        <div class="preview-row">
+          <s data-was>4,00 €</s>
+          <b data-now>2,40 €</b>
+          <span class="badge" data-badge>−%40</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" data-s="live">
+    <div class="panel-head"><strong style="font-weight:500">Ne zaman geçerli?</strong><span class="ui-small">Ekşi mayalı ekmek</span></div>
+    <div class="repeat">
+      {repeat.map((r) => (
+        <div class={`opt${r.on ? ' on' : ''}`}><div><div>{r.t}</div><div class="ui-small">{r.d}</div></div></div>
+      ))}
+    </div>
+    <div class="chips days">{days.map(([d, on]) => <span class={`chip${on ? ' on' : ''}`}>{d}</span>)}</div>
+    <div class="row-toggle">
+      <div><div>Saat aralığı</div><div class="ui-small">Seçilen günlerde yalnızca bu saatlerde</div></div>
+      <span class="adet nums">17.00–19.00</span>
+      <span class="toggle on" aria-hidden="true"></span>
+    </div>
+    <dl class="kv">
+      <dt>Başlangıç</dt><dd>20.10.2026</dd>
+      <dt>Bitiş</dt><dd>Yok · süresiz</dd>
+    </dl>
+  </div>
+
+  <div class="screen" data-s="verify">
+    <div class="panel-head"><strong style="font-weight:500">Kampanyalar</strong><span class="ui-btn sm">+ Yeni kampanya</span></div>
+    {list.map((c) => (
+      <div class="camp">
+        <div class="camp-top"><span class="product-name">{c.name}</span><span class="tag">Aktif</span></div>
+        <span class="ui-small">{c.rep}</span>
+        <div class="camp-top"><span class="ui-accent">{c.offer}</span><span class="ui-small">{c.date}</span></div>
+        <div class="camp-actions ui-small"><span>Düzenle</span><span>Kopyala</span><span>Sil</span></div>
+      </div>
+    ))}
+  </div>
+</div>

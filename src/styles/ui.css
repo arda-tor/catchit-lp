@@ -1,0 +1,185 @@
+/* CatchIt'in kendi arayüzünden kırpılmış parçalar. Uygulamanın kendi kuralları geçerlidir:
+   küçük köşeler, 1px kontrol kenarları, açık diyalogda gölge. Hepsi [data-ui] altında. */
+
+[data-ui] {
+  --ui-bg: #ffffff;
+  --ui-card: #f4f4ef;
+  --ui-line: #dcddd3;
+  --ui-ink: #13301f;
+  --ui-muted: #5d6a62;
+  --ui-accent: #2e6b3c;
+  --ui-accent-ink: #ffffff;
+  --ui-ok: #2e6b3c;
+  font-family: var(--font);
+  color: var(--ui-ink);
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+}
+[data-ui] p { max-width: none; margin: 0; }
+[data-ui] .ui-small { font-size: 13px; color: var(--ui-muted); }
+[data-ui] .ui-accent { color: var(--ui-accent); }
+[data-ui] .ui-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 16px; border-radius: 10px; background: var(--ui-accent); color: var(--ui-accent-ink); font-weight: 500; font-size: 15px; text-decoration: none; transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease; }
+[data-ui] .ui-btn:active { transform: scale(0.96); }
+@media (hover: hover) and (pointer: fine) { [data-ui] .ui-btn:hover { background: #275c33; } }
+[data-ui] .ui-btn.block { width: 100%; min-height: 48px; }
+
+/* phone screen: a plain rounded rectangle, no device frame */
+[data-ui].phone { width: min(320px, calc(100vw - 24px)); height: 500px; border-radius: 28px; background: var(--ui-bg); padding: 22px 16px; position: relative; overflow: hidden; border: 1px solid var(--ui-line); }
+[data-ui] .screen { position: absolute; inset: 22px 16px; display: grid; align-content: start; gap: 12px; transition: opacity 280ms ease, transform 380ms var(--ease-out), visibility 0s linear 0s; }
+/* inactive states are hidden (not only transparent) so they never sit on top of the active one */
+.js [data-ui] .screen { opacity: 0; transform: translateY(10px); visibility: hidden; transition-delay: 0s, 0s, 280ms; }
+.js [data-state='list'] [data-ui] .screen[data-s='list'],
+.js [data-state='code'] [data-ui] .screen[data-s='code'],
+.js [data-state='done'] [data-ui] .screen[data-s='done'],
+.js [data-state='form'] [data-ui] .screen[data-s='form'],
+.js [data-state='live'] [data-ui] .screen[data-s='live'],
+.js [data-state='verify'] [data-ui] .screen[data-s='verify'] { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+.no-js [data-ui] .screen:not(:first-child) { display: none; }
+
+[data-ui] .top { display: flex; justify-content: space-between; align-items: baseline; }
+[data-ui] .top strong { font-weight: 500; font-size: 17px; }
+[data-ui] .deal { border: 1px solid var(--ui-line); background: var(--ui-card); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; }
+[data-ui] .deal.is-selected { border-color: var(--ui-accent); }
+[data-ui] .deal .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+[data-ui] .deal .offer { font-size: 22px; letter-spacing: -0.02em; color: var(--ui-accent); }
+[data-ui] .deal .name { font-weight: 500; }
+[data-ui] .deal .ui-btn { margin-top: 8px; }
+[data-ui] .code-card { border-radius: 18px; background: var(--ui-card); border: 1px solid var(--ui-line); padding: 22px 18px; display: grid; gap: 14px; text-align: center; justify-items: center; }
+[data-ui] .code { font-size: 44px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; color: var(--ui-ink); line-height: 1; }
+[data-ui] .check { width: 64px; height: 64px; border-radius: 50%; background: var(--ui-ok); display: grid; place-items: center; }
+[data-ui] .check svg { width: 30px; height: 30px; }
+[data-ui] .kv { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; border-top: 1px solid var(--ui-line); padding-top: 12px; width: 100%; font-size: 14px; }
+[data-ui] .kv dt { color: var(--ui-muted); }
+[data-ui] .kv dd { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* sheets for the showcase stage */
+[data-ui].sheet-ui { width: min(360px, calc(100vw - 24px)); border-radius: 22px; background: var(--ui-bg); border: 1px solid var(--ui-line); padding: 20px; display: grid; gap: 14px; }
+[data-ui] .lock-time { font-size: 72px; line-height: 1; letter-spacing: -0.03em; text-align: center; margin-top: 18px; font-variant-numeric: tabular-nums; }
+[data-ui] .lock-date { text-align: center; color: var(--ui-muted); margin-bottom: 28px; }
+[data-ui] .notif { background: var(--ui-card); border-radius: 16px; padding: 12px 14px; display: grid; gap: 4px; box-shadow: 0 8px 24px rgb(19 48 31 / 10%); }
+[data-ui] .notif .app { display: flex; justify-content: space-between; font-size: 13px; color: var(--ui-muted); }
+[data-ui] .notif .app b { font-weight: 500; color: var(--ui-ink); }
+[data-ui] .fav { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--ui-line); }
+[data-ui] .fav:last-child { border-bottom: 0; }
+[data-ui] .tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: var(--ui-accent); color: var(--ui-accent-ink); }
+[data-ui] .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+[data-ui] .chip { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--ui-line); font-size: 14px; }
+[data-ui] .chip.on { background: var(--ui-accent); border-color: var(--ui-accent); color: var(--ui-accent-ink); }
+[data-ui] .opt { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; border: 1px solid var(--ui-line); }
+[data-ui] .opt.on { border-color: var(--ui-accent); }
+[data-ui] .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ui-muted); flex: none; margin-top: 2px; }
+[data-ui] .opt.on .radio { border-color: var(--ui-accent); box-shadow: inset 0 0 0 4px var(--ui-bg); background: var(--ui-accent); }
+
+/* merchant panel */
+[data-ui].panel { width: min(440px, calc(100vw - 24px)); height: 500px; border-radius: 14px; background: var(--ui-bg); border: 1px solid var(--ui-line); position: relative; overflow: hidden; }
+[data-ui].panel .screen { inset: 0; padding: 20px 22px; }
+[data-ui] .panel-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--ui-line); }
+[data-ui] .field-ui { display: grid; gap: 6px; }
+[data-ui] .field-ui span { font-size: 13px; color: var(--ui-muted); }
+[data-ui] .field-ui b, [data-ui] input.input { font-weight: 400; display: block; border: 1px solid var(--ui-line); background: var(--ui-card); border-radius: 10px; padding: 10px 12px; font-size: 15px; width: 100%; color: var(--ui-ink); }
+[data-ui] input.input:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
+[data-ui] .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+[data-ui] .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+[data-ui] .stat { background: var(--ui-card); border-radius: 12px; padding: 12px; display: grid; gap: 2px; }
+[data-ui] .stat b { font-weight: 400; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+[data-ui] .meter { height: 8px; border-radius: 4px; background: var(--ui-card); overflow: hidden; }
+[data-ui] .meter i { display: block; height: 100%; background: var(--ui-accent); }
+[data-ui] .live-dot { color: var(--ui-ok); }
+
+/* deal ticket as customers see it */
+[data-ui].ticket { width: min(340px, calc(100vw - 24px)); border-radius: 20px; background: var(--ui-bg); border: 1px solid var(--ui-line); overflow: hidden; }
+[data-ui] .ticket-top { padding: 22px 20px 18px; display: grid; gap: 6px; }
+[data-ui] .ticket-offer { font-size: 64px; line-height: 0.95; letter-spacing: -0.04em; color: var(--ui-accent); }
+[data-ui] .ticket-cut { border-top: 1px dashed var(--ui-line); margin: 0 14px; }
+[data-ui] .ticket-bottom { padding: 16px 20px 20px; display: grid; gap: 12px; }
+
+/* dialogs in the closing section */
+[data-ui].dialog { width: min(440px, 100%); border-radius: 18px; background: var(--ui-bg); padding: 26px; display: grid; gap: 18px; box-shadow: 0 30px 60px rgb(8 28 16 / 35%); }
+[data-ui] .dialog-title { font-size: 22px; letter-spacing: -0.01em; }
+[data-ui] .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--ui-card); border-radius: 12px; padding: 4px; gap: 4px; }
+[data-ui] .seg label { position: relative; }
+[data-ui] .seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+[data-ui] .seg span { display: grid; place-items: center; text-align: center; min-height: 44px; padding: 6px 10px; border-radius: 9px; color: var(--ui-muted); transition: background-color var(--t-hover) ease, color var(--t-hover) ease; }
+[data-ui] .seg input:checked + span { background: var(--ui-bg); color: var(--ui-ink); box-shadow: 0 1px 3px rgb(19 48 31 / 14%); }
+[data-ui] .seg input:focus-visible + span { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
+
+
+/* merchant panel, based on the product's real campaign editor */
+[data-ui] .ui-btn.sm { min-height: 32px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+[data-ui] .preview-grid { display: grid; gap: 12px; }
+[data-ui] .product { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--ui-card); border: 1px solid var(--ui-line); border-radius: 12px; padding: 10px 12px; }
+[data-ui] .product-name { font-weight: 500; }
+[data-ui] .inline-field { display: flex; align-items: center; gap: 8px; position: relative; }
+[data-ui] .inline-field.wide { justify-content: space-between; background: var(--ui-card); border: 1px solid var(--ui-line); border-radius: 12px; padding: 6px 12px; }
+[data-ui] input.input.sm { width: 84px; padding: 6px 26px 6px 10px; text-align: right; font-variant-numeric: tabular-nums; background: var(--ui-bg); }
+[data-ui] .inline-field .suffix { position: absolute; right: 10px; color: var(--ui-muted); pointer-events: none; }
+[data-ui] .inline-field.wide .suffix { right: 22px; }
+[data-ui] .row-toggle { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; border: 1px solid var(--ui-line); border-radius: 12px; padding: 10px 12px; }
+[data-ui] .adet { font-size: 14px; }
+[data-ui] .toggle { width: 38px; height: 22px; border-radius: 11px; background: var(--ui-line); position: relative; }
+[data-ui] .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform var(--t-ui) var(--ease-out); }
+[data-ui] .toggle.on { background: var(--ui-accent); }
+[data-ui] .toggle.on::after { transform: translateX(16px); }
+[data-ui] .preview { background: #e9f1e5; border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+[data-ui] .preview-row { display: flex; align-items: baseline; gap: 12px; font-variant-numeric: tabular-nums; }
+[data-ui] .preview-row s { color: var(--ui-muted); }
+[data-ui] .preview-row b { font-weight: 500; font-size: 26px; letter-spacing: -0.02em; color: var(--ui-accent); }
+[data-ui] .badge { margin-left: auto; font-size: 12px; padding: 3px 8px; border-radius: 6px; background: var(--ui-accent); color: var(--ui-accent-ink); }
+[data-ui] .repeat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+[data-ui] .repeat .opt { padding: 10px 12px; }
+[data-ui] .days .chip { padding: 6px 10px; font-size: 13px; }
+[data-ui] .camp { border: 1px solid var(--ui-line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; }
+[data-ui] .camp-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+[data-ui] .camp-actions { display: flex; gap: 16px; padding-top: 4px; }
+[data-ui] .price-row { display: flex; align-items: baseline; gap: 10px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+[data-ui] .price-row b { font-weight: 500; font-size: 20px; }
+
+/* store buttons in the closing dialog */
+[data-ui] .stores { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+[data-ui] .store-btn {
+  display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 10px 16px; border-radius: 12px;
+  background: var(--ui-accent); color: var(--ui-accent-ink); text-decoration: none; border: 1px solid var(--ui-accent);
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, color var(--t-hover) ease;
+}
+[data-ui] .store-btn svg { width: 26px; height: 26px; flex: none; }
+[data-ui] .store-btn span { display: grid; line-height: 1.15; font-size: 17px; font-weight: 500; }
+[data-ui] .store-btn small { font-size: 13px; font-weight: 400; opacity: 0.85; }
+[data-ui] .store-btn:active { transform: scale(0.97); }
+[data-ui] .store-btn.is-secondary { background: var(--ui-bg); color: var(--ui-ink); border-color: var(--ui-line); }
+@media (hover: hover) and (pointer: fine) {
+  [data-ui] .store-btn:hover { background: #275c33; }
+  [data-ui] .store-btn.is-secondary:hover { background: var(--ui-card); }
+}
+[data-ui] .store-note { font-size: 15px; color: var(--ui-muted); }
+@media (max-width: 520px) { [data-ui] .stores { grid-template-columns: 1fr; } }
+
+/* in the pinned stage the fragment is scaled to fit (site.ts sets --fit on it); it is never cropped */
+/* aligned to the top, scaled from the top edge and centred by an offset site.ts computes: an overflowing grid item
+   is start-aligned by the browser, so scaling from the centre would push it down */
+.js .stage > [data-ui] { align-self: start; transform: translateY(var(--fit-dy, 0px)) scale(var(--fit, 1)); transform-origin: top center; flex: none; }
+
+/* narrow phones: options stack on one column so labels stay on one line, and the dialog breathes less */
+@media (max-width: 420px) {
+  [data-ui].dialog { padding: 20px; gap: 14px; border-radius: 16px; }
+  [data-ui] .dialog-title { font-size: 20px; }
+  [data-ui].dialog .seg { grid-template-columns: 1fr; }
+}
+
+/* phones: the merchant panel drops its secondary lines and gets shorter, so the pinned stage scales it far less
+   and its text stays readable. The full panel is shown on wider screens. */
+@media (max-width: 900px) {
+  [data-ui].panel { height: 430px; }
+  [data-ui].panel .panel-head { padding-bottom: 10px; }
+  [data-ui].panel .preview-grid { gap: 8px; }
+  [data-ui].panel .product { padding: 8px 12px; }
+  [data-ui].phone { height: 400px; padding: 18px 14px; }
+  [data-ui].phone .screen { inset: 18px 14px; gap: 10px; }
+  [data-ui].phone .screen[data-s='list'] .deal:nth-of-type(3) { display: none; }
+  [data-ui].panel .screen { padding: 16px 16px; gap: 10px; }
+  [data-ui].panel .row-toggle .ui-small,
+  [data-ui].panel .repeat .ui-small,
+  [data-ui].panel .camp-actions { display: none; }
+  [data-ui].panel .row-toggle { padding: 8px 12px; }
+  [data-ui].panel .preview { padding: 10px 12px; }
+}

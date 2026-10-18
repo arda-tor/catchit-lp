@@ -1,0 +1,35 @@
+---
+// Etkin liste: soldaki satırlardan biri etkin olduğunda sağdaki fotoğraf onunkine geçer.
+import type { MarketingPage } from '../data/types';
+import { photo } from '../lib/photos';
+interface Props { list: MarketingPage['list'] }
+const { list } = Astro.props;
+---
+
+<section class="section cats" id="liste" aria-labelledby="list-title" data-list>
+  <div class="grid">
+    <div class="rows">
+      <h2 id="list-title" class="head">{list.heading}</h2>
+      <p class="lede">{list.lead}</p>
+      <ul>
+        {list.items.map((it, i) => (
+          <li class={`cat${i === 0 ? ' is-active' : ''}`} data-i={i}>
+            <button type="button" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`cat-${i}`}>
+              <span class="name">{it.name}</span>
+              <span class="meta">{it.meta}</span>
+            </button>
+            <div class="desc" id={`cat-${i}`}><div><p>{it.text}</p></div></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="photo-wrap" data-shutter>
+      <div class="cat-photo shutter">
+        {list.items.map((it, i) => {
+          const p = photo(it.photo);
+          return <img src={p.file} width={p.width} height={p.height} alt={it.alt} loading="lazy" decoding="async" class={i === 0 ? 'is-on' : undefined} data-i={i} />;
+        })}
+      </div>
+    </div>
+  </div>
+</section>

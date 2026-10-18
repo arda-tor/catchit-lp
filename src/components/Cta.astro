@@ -1,0 +1,18 @@
+---
+// Kapanış: ters çevrilmiş alan, ürünün ilk ekranı zaten açık.
+import type { MarketingPage } from '../data/types';
+interface Props { cta: MarketingPage['cta']; id?: string }
+const { cta, id = 'indir' } = Astro.props;
+---
+
+<section class="section cta" id={id} aria-labelledby="cta-title">
+  <div class="grid">
+    <div class="closing" data-reveal>
+      <h2 id="cta-title" class="head" style="--i:0">{cta.heading}</h2>
+      <p style="--i:1">{cta.text}</p>
+    </div>
+    <div class="dialog-wrap" data-reveal style="--rise:32px">
+      <div style="--i:2"><slot /></div>
+    </div>
+  </div>
+</section>

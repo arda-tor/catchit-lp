@@ -1,0 +1,28 @@
+---
+// Sabitlenen tek ekran: solda üç adım birlikte görünür, sağda uygulama parçası etkin adımın durumunu gösterir.
+// Kaydırma ilerlemesi etkin adımı seçer; başlığa tıklamak o adımın kaydırma noktasına götürür.
+// Script yoksa iz kısalır, sabitleme kalkar ve bütün açıklamalar görünür.
+import type { MarketingPage } from '../data/types';
+interface Props { steps: MarketingPage['steps']; states: string[] }
+const { steps, states } = Astro.props;
+---
+
+<section class="how" id="nasil" aria-labelledby="how-title" data-how style={`--count:${steps.items.length}`}>
+  <div class="how-pin">
+    <div class="how-text">
+      <h2 id="how-title" class="lead muted">{steps.heading}</h2>
+      <ol class="how-steps">
+        {steps.items.map((s, i) => (
+          <li class={`step${i === 0 ? ' is-active' : ''}`} data-step={states[i]} data-i={i}>
+            <h3><button type="button" aria-current={i === 0 ? 'step' : undefined}>{s.title}</button></h3>
+            <div class="step-desc"><div><p>{s.text}</p></div></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <div class="stage" data-state={states[0]}>
+      <slot />
+      <p class="ui-note">Temsili görsel. Uygulamanın gerçek arayüzü farklılık gösterebilir.</p>
+    </div>
+  </div>
+</section>

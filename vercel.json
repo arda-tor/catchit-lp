@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "has": [{ "type": "header", "key": "accept", "value": "(.*)text/markdown(.*)" }], "destination": "/index.md" },
+    { "source": "/(merchants|terms|privacy)", "has": [{ "type": "header", "key": "accept", "value": "(.*)text/markdown(.*)" }], "destination": "/$1.md" }
+  ],
+  "headers": [
+    {
+      "source": "/(|merchants|terms|privacy)",
+      "headers": [{ "key": "Vary", "value": "Accept" }]
+    },
+    {
+      "source": "/(.*)\\.md",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex" },
+        { "key": "Vary", "value": "Accept" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/(llms|llms-full)\\.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}

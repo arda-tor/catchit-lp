@@ -1,0 +1,15 @@
+---
+// Sorular, programın arkasındaki notlar gibi düz okuma metni: soru koyu, cevap aynı satırda devam eder.
+import type { MarketingPage } from '../data/types';
+interface Props { faq: MarketingPage['faq'] }
+const { faq } = Astro.props;
+---
+
+<section class="section faq" id="sorular" aria-labelledby="faq-title">
+  <div class="grid">
+    <h2 id="faq-title" class="faq-head lead">{faq.heading}</h2>
+    <div class="faq-text" data-reveal style="--rise:16px">
+      {faq.items.map((f, i) => <p style={`--i:${i}`}><strong>{f.q}</strong> {f.a}</p>)}
+    </div>
+  </div>
+</section>

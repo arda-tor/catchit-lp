@@ -1,0 +1,33 @@
+---
+import { SITE } from '../config/site';
+import { photosFor } from '../lib/photos';
+
+interface Props { markdownPath: string; photos: string[] }
+const { markdownPath, photos } = Astro.props;
+const credits = photosFor(photos);
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  {credits.length > 0 && (
+    <p class="credits">
+      Fotoğraflar Avrupa şehirlerinden, açık lisanslı arşivlerden alındı; CatchIt’e ya da bir müşteri işletmeye ait değildir:{' '}
+      {credits.map((c, i) => (
+        <>
+          <a class="link" href={c.page}>“{c.title}”</a>, {c.creator}, <a class="link" href={c.licenseUrl}>{c.license}</a>{i < credits.length - 1 ? '; ' : ', Wikimedia Commons.'}
+        </>
+      ))}
+    </p>
+  )}
+  <div class="line">
+    <span class="left">Yakındaki fırsatlar uygulaması</span>
+    <ul aria-label="Alt menü">
+      <li><a class="link" href="/">Uygulama</a></li>
+      <li><a class="link" href="/merchants">İşletmeler</a></li>
+      <li><a class="link" href="/terms">Kullanım Koşulları</a></li>
+      <li><a class="link" href="/llms.txt">llms.txt</a></li>
+      <li><a class="link" href={markdownPath}>Markdown</a></li>
+    </ul>
+    <span class="right">© {year} {SITE.name} · <a class="link" href="/privacy">Gizlilik</a></span>
+  </div>
+</footer>

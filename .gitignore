@@ -11,3 +11,9 @@
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Build output
+node_modules/
+dist/
+.astro/
+.taste-skill/

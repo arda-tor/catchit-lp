@@ -1,0 +1,56 @@
+---
+// Ana sayfanın canlı öğesi: fırsatlar gerçek zamanlı geri sayar, "Yakala" gerçekten bir kod üretir.
+// İşletme adları örnektir; gerçek bir işletmeyi temsil etmez.
+const deals = [
+  { name: 'Bäckerei Morgenrot', offer: '%40', item: 'Günün ekmekleri', where: '260 m', secs: 58 * 60 + 12, left: '14 adet kaldı' },
+  { name: 'Café Lindgrün', offer: '%30', item: 'Filtre kahve', where: '140 m', secs: 41 * 60 + 5, left: '9 adet kaldı' },
+  { name: 'Bistro Zwölf', offer: '−2 €', item: 'Günün çorbası', where: '410 m', secs: 2 * 3600 + 12 * 60, left: '22 adet kaldı' },
+]
+const fmt = (s: number) => {
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+  return (h ? `${h}:${String(m).padStart(2, '0')}` : String(m).padStart(2, '0')) + `:${String(x).padStart(2, '0')}`;
+};
+const first = deals[0];
+---
+
+<div class="phone" data-ui aria-label="CatchIt uygulamasından örnek ekran">
+  <div class="screen" data-s="list">
+    <div class="top"><strong>Yakınında</strong><span class="ui-small">Çevrende</span></div>
+    {deals.map((d, i) => (
+      <div class={`deal${i === 0 ? ' is-selected' : ''}`}>
+        <div class="row"><span class="name">{d.name}</span><span class="offer">{d.offer}</span></div>
+        <div class="row ui-small"><span>{d.item} · {d.where}</span></div>
+        <div class="row ui-small"><span class="nums"><span data-countdown={d.secs}>{fmt(d.secs)}</span> kaldı</span><span>{d.left}</span></div>
+        {i === 0 && <button type="button" class="ui-btn block" data-catch>Yakala</button>}
+      </div>
+    ))}
+  </div>
+
+  <div class="screen" data-s="code">
+    <div class="top"><strong>{first.name}</strong><span class="ui-small">{first.where}</span></div>
+    <div class="code-card">
+      <span class="ui-small">Kasada bu kodu göster</span>
+      <span class="code" data-code>K7Q 2M4</span>
+      <span class="ui-accent">{first.offer} · {first.item}</span>
+      <dl class="kv">
+        <dt>Kampanyanın bitmesine</dt><dd><span data-countdown={first.secs}>{fmt(first.secs)}</span></dd>
+        <dt>Kullanım</dt><dd>Tek sefer</dd>
+      </dl>
+    </div>
+    <p class="ui-small">Kod yalnızca bu kampanya için ve yalnızca bir kez geçerlidir.</p>
+  </div>
+
+  <div class="screen" data-s="done">
+    <div class="top"><strong>{first.name}</strong><span class="ui-small">18.42</span></div>
+    <div class="code-card">
+      <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+      <span style="font-size:22px">Onaylandı</span>
+      <span class="ui-accent">{first.offer} uygulandı</span>
+      <dl class="kv">
+        <dt>Kod</dt><dd data-code>K7Q 2M4</dd>
+        <dt>İşletme</dt><dd>{first.name}</dd>
+      </dl>
+    </div>
+    <p class="ui-small">Afiyet olsun. Favorilere eklersen bu fırının yeni kampanyaları listenin başına gelir.</p>
+  </div>
+</div>

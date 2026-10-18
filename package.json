@@ -1,0 +1,33 @@
+{
+  "name": "catchit-lp",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "share": "ngrok http 4321 --traffic-policy-file ngrok-policy.yml",
+    "astro": "astro"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arda-tor/catchit-lp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arda-tor/catchit-lp/issues"
+  },
+  "homepage": "https://github.com/arda-tor/catchit-lp#readme",
+  "dependencies": {
+    "@astrojs/markdown-remark": "^6.3.11",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.18.2"
+  },
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3"
+  }
+}

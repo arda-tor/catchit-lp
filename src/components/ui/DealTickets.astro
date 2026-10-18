@@ -1,0 +1,29 @@
+---
+// Kampanya türlerinin müşterinin telefonunda nasıl göründüğü. Sıra, Showcase'teki isim sırasıyla aynı.
+// İşletme adları örnektir; fiyatlar birbirini tutar (3,20 € × 0,70 = 2,24 €).
+const eur = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+const tickets = [
+  { offer: '%30', item: 'Filtre kahve', shop: 'Café Lindgrün', where: '140 m', was: 3.2, now: 2.24, when: 'Bugün 15.00–17.00', left: '6 adet kaldı' },
+  { offer: '−2 €', item: 'Günün çorbası', shop: 'Bistro Zwölf', where: '410 m', was: 6.5, now: 4.5, when: 'Hafta içi 12.00–14.00', left: 'Süresiz' },
+  { offer: '%40', item: 'Günün ekmekleri', shop: 'Bäckerei Morgenrot', where: '260 m', was: 4, now: 2.4, when: 'Kapanışa 58 dk', left: '14 adet kaldı' },
+  { offer: '%25', item: 'Mevsim buketi', shop: 'Blumen Weide', where: '520 m', was: 18, now: 13.5, when: 'Her cumartesi', left: '8 adet kaldı' },
+];
+---
+
+{tickets.map((t, i) => (
+  <div class="sheet" data-sheet={i} hidden={i !== 0}>
+    <div class="ticket" data-ui aria-label={`Müşterinin gördüğü kampanya: ${t.offer} ${t.item}`}>
+      <div class="ticket-top">
+        <span class="ticket-offer">{t.offer}</span>
+        <span style="font-size:20px">{t.item}</span>
+        <span class="ui-small">{t.shop} · {t.where}</span>
+        <span class="price-row"><s class="ui-small">{eur(t.was)}</s> <b class="ui-accent">{eur(t.now)}</b></span>
+      </div>
+      <div class="ticket-cut"></div>
+      <div class="ticket-bottom">
+        <div style="display:flex;justify-content:space-between" class="ui-small"><span>{t.when}</span><span>{t.left}</span></div>
+        <span class="ui-btn block">Yakala</span>
+      </div>
+    </div>
+  </div>
+))}

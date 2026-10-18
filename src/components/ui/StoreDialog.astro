@@ -1,0 +1,20 @@
+---
+import { SITE } from '../../config/site';
+// İki net mağaza butonu. Script yoksa ikisi de eşit ve çalışır durumdadır.
+// Script ziyaretçinin cihazını tanırsa (site.ts [data-store]) onun mağazası birincil, diğeri ikincil olur.
+---
+
+<div class="dialog" data-ui data-store role="group" aria-labelledby="store-title">
+  <span class="dialog-title" id="store-title">CatchIt’i indir</span>
+  <div class="stores">
+    <a class="store-btn" href={SITE.appStore} rel="noopener" data-platform="ios">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9s-2-.9-3.4-.9C5.9 6.8 4.3 7.8 3.4 9.4c-1.8 3.2-.5 7.9 1.3 10.4.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.4.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.4ZM13.9 4.9c.7-.9 1.2-2 1-3.2-1 .1-2.3.7-3 1.6-.7.7-1.3 1.9-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"/></svg>
+      <span><small>iPhone için</small>App Store</span>
+    </a>
+    <a class="store-btn" href={SITE.playStore} rel="noopener" data-platform="android">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.6 2.3c-.3.3-.4.7-.4 1.2v17c0 .5.1.9.4 1.2l9.5-9.7-9.5-9.7Zm10.6 10.8 2.6 2.7-11.4 6.5 8.8-9.2Zm0-2.2L5.4 1.7l11.4 6.5-2.6 2.7Zm3.9 4-3-3.1 3-3.1 3.5 2c1 .6 1 1.9 0 2.4l-3.5 1.8Z"/></svg>
+      <span><small>Android için</small>Google Play</span>
+    </a>
+  </div>
+  <p class="store-note">Konum izni isteğe bağlı; izin vermeden semtini seçerek de kullanabilirsin.</p>
+</div>
