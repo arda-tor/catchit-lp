@@ -2,6 +2,7 @@
 // Kahraman + giriş: solda sabit duran fotoğraf, sağda kayan okuma sütunu, ikisini kesen dev kelime.
 import type { MarketingPage } from '../data/types';
 import { photo } from '../lib/photos';
+import MobileMenu from './MobileMenu.astro';
 
 interface Props {
   page: MarketingPage;
@@ -33,15 +34,15 @@ const isExternal = (href: string) => href.startsWith('http');
           {hero.secondary && <li><a class="link" href={hero.secondary.href}>{hero.secondary.label}</a></li>}
           <li><a class="link nav-action" href={hero.action.href}>{hero.action.label}</a></li>
         </ul>
-        <details class="nav-menu">
-          <summary>Menü</summary>
-          <ul>
-            <li><a href="#nasil">Nasıl çalışır</a></li>
-            <li><a href="#liste">{page.list.heading}</a></li>
-            <li><a href="#sorular">Sorular</a></li>
-            {hero.secondary && <li><a href={hero.secondary.href}>{hero.secondary.label}</a></li>}
-          </ul>
-        </details>
+        <MobileMenu
+          links={[
+            { href: '#nasil', label: 'Nasıl çalışır' },
+            { href: '#liste', label: page.list.heading },
+            { href: '#sorular', label: 'Sorular' },
+          ]}
+          action={hero.action}
+          note={hero.secondary}
+        />
       </nav>
     </div>
 

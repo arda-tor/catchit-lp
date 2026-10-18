@@ -1,0 +1,28 @@
+---
+// Telefon menüsü: "Menü" yazısı, ekranı kaplayan koyu yeşil bir sayfa açar.
+// <details> sayesinde script olmadan da açılıp kapanır; script (site.ts [data-menu]) bağlantıya dokununca ve
+// Esc'ye basınca kapatır, açıkken sayfanın kaymasını durdurur.
+import type { Link } from '../data/types';
+interface Props { links: Link[]; action: Link; note?: Link }
+const { links, action, note } = Astro.props;
+const ext = (href: string) => (href.startsWith('http') ? 'noopener' : undefined);
+---
+
+<details class="menu" data-menu>
+  <summary class="menu-toggle">
+    <span class="when-closed">Menü</span>
+    <span class="when-open">Kapat</span>
+  </summary>
+  <div class="menu-sheet">
+    <a class="menu-mark" href="/" aria-label="CatchIt ana sayfa">catchit</a>
+    <nav aria-label="Telefon menüsü">
+      <ul class="menu-links">
+        {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} rel={ext(l.href)}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="menu-foot" style={`--i:${links.length}`}>
+      <a class="menu-action" href={action.href} rel={ext(action.href)}>{action.label}</a>
+      {note && <a class="menu-note" href={note.href}>{note.label}</a>}
+    </div>
+  </div>
+</details>

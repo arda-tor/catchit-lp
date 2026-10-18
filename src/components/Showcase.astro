@@ -1,11 +1,14 @@
 ---
 // Çıktı dizini: sağda isimler, solda seçili isme ait uygulama ekranı. Ekranlar slot'tan gelir (.sheet).
+// Bölüm bir kaydırma izidir: ekran sabitlenir, kaydırdıkça sıradaki öğe seçilir (site.ts [data-showcase]).
+// İsme dokunmak o öğenin kaydırma noktasına götürür. Script yoksa iz kısalır ve ilk öğe görünür.
 import type { MarketingPage } from '../data/types';
 interface Props { showcase: MarketingPage['showcase']; stageHeight?: string }
 const { showcase, stageHeight } = Astro.props;
 ---
 
-<section class="section showcase" aria-labelledby="show-title" data-showcase style={stageHeight ? `--stage-h:${stageHeight}` : undefined}>
+<section class="section showcase" aria-labelledby="show-title" data-showcase style={`--count:${showcase.items.length};${stageHeight ? `--stage-h:${stageHeight}` : ''}`}>
+  <div class="show-pin">
   <div class="grid">
     <div class="index" data-reveal>
       <h2 id="show-title" class="sr-only">{showcase.heading}</h2>
@@ -22,5 +25,6 @@ const { showcase, stageHeight } = Astro.props;
       <slot />
       <p class="ui-note">Temsili görsel. Uygulamanın gerçek arayüzü farklılık gösterebilir.</p>
     </div>
+  </div>
   </div>
 </section>

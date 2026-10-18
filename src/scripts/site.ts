@@ -127,17 +127,63 @@ for (const track of $$('[data-how]')) {
   }
 }
 
-// --- vitrin: isim seçilince ekran değişir ---
-for (const section of $$('[data-showcase]')) {
-  const buttons = $$<HTMLButtonElement>('button[data-i]', section);
-  const sheets = $$('[data-sheet]', section);
-  const notes = $$('[data-note]', section);
-  const select = (i: string) => {
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.i === i)));
-    sheets.forEach((s) => (s.hidden = s.dataset.sheet !== i));
-    notes.forEach((n) => (n.hidden = n.dataset.note !== i));
+// --- vitrin: bölüm bir kaydırma izi; izin neresinde olduğun seçili öğeyi belirler ---
+// Kaydırma tek doğruluk kaynağıdır; isme dokunmak o öğenin konumuna kaydırır. Telefonda bilet sahneye sığdırılır.
+for (const track of $$('[data-showcase]')) {
+  const buttons = $$<HTMLButtonElement>('button[data-i]', track);
+  const sheets = $$('[data-sheet]', track);
+  const notes = $$('[data-note]', track);
+  const stage = track.querySelector<HTMLElement>('.sheet-stage');
+  const n = buttons.length;
+  if (!n || !stage) continue;
+  let current = -1;
+  const narrow = matchMedia('(max-width: 900px)');
+  const fit = () => {
+    const uis = sheets.map((sh) => sh.querySelector<HTMLElement>('[data-ui]')).filter(Boolean) as HTMLElement[];
+    if (!narrow.matches) { uis.forEach((u) => { u.style.removeProperty('--fit'); u.style.removeProperty('--fit-dy'); }); return; }
+    const note = stage.querySelector<HTMLElement>('.ui-note');
+    if (note) stage.style.setProperty('--note-h', `${note.offsetHeight}px`);
+    const cs = getComputedStyle(stage);
+    const aw = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const ah = stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const maxW = Math.max(...uis.map((u) => u.offsetWidth));
+    const maxH = Math.max(...uis.map((u) => u.offsetHeight));
+    const sc = Math.max(0.3, Math.min(1, aw / maxW, ah / maxH));
+    uis.forEach((u) => {
+      u.style.setProperty('--fit', String(sc));
+      u.style.setProperty('--fit-dy', `${Math.max(0, (ah - u.offsetHeight * sc) / 2)}px`);
+    });
   };
-  buttons.forEach((b) => b.addEventListener('click', () => select(b.dataset.i!)));
+  const set = (i: number) => {
+    if (i === current) return;
+    current = i;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.i) === i)));
+    sheets.forEach((sh) => (sh.hidden = Number(sh.dataset.sheet) !== i));
+    notes.forEach((nt) => (nt.hidden = Number(nt.dataset.note) !== i));
+    // açıklamanın uzunluğu değişince sahne yüksekliği de değişebilir
+    requestAnimationFrame(fit);
+  };
+  const span = () => Math.max(1, track.offsetHeight - innerHeight);
+  const update = () => {
+    const p = Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span()));
+    set(Math.min(n - 1, Math.floor(p * n * 0.999)));
+  };
+  let queued = false;
+  addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; update(); });
+  }, { passive: true });
+  addEventListener('resize', () => { fit(); update(); });
+  addEventListener('load', fit);
+  document.fonts?.ready.then(fit);
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    const i = Number(b.dataset.i);
+    const y = track.getBoundingClientRect().top + scrollY + span() * ((i + 0.5) / n);
+    scrollTo({ top: y, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
+  update();
+  fit();
 }
 
 // --- kategori listesi: üzerine gelinen, odaklanılan ya da ekranın ortasına gelen satır etkin olur ---
@@ -219,4 +265,14 @@ for (const box of $$('[data-store]')) {
     }));
     calc();
   }
+}
+
+// --- telefon menüsü: bağlantıya dokununca ve Esc ile kapanır, açıkken sayfa kaymaz ---
+for (const menu of $$<HTMLDetailsElement>('[data-menu]')) {
+  const sync = () => document.documentElement.classList.toggle('menu-open', menu.open);
+  menu.addEventListener('toggle', sync);
+  $$('a', menu).forEach((a) => a.addEventListener('click', () => { menu.open = false; }));
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+  });
 }

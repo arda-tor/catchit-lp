@@ -92,7 +92,7 @@ p + p { margin-top: 0.9em; }
 .nav a { text-decoration: none; }
 .nav ul { display: flex; gap: clamp(1rem, 2vw, 2rem); }
 .nav .nav-action { color: var(--accent); }
-.nav-menu { display: none; }
+.menu { display: none; }
 .bar { display: flex; justify-content: space-between; align-items: center; padding: var(--margin); position: relative; z-index: 5; }
 .wordmark-small { font-size: 1.5rem; letter-spacing: -0.03em; text-decoration: none; line-height: 1; }
 
@@ -166,6 +166,10 @@ p + p { margin-top: 0.9em; }
 /* showcase: output index, stage on the left */
 .showcase .sheet-stage .ui-note { top: 24px; bottom: auto; left: 64px; }
 .showcase { background: var(--surface); }
+/* scroll track: the pin holds the index and the stage for one screen while the items advance */
+.js .showcase { padding-block: 0; height: calc(100svh + (var(--count, 4) - 1) * 55svh); }
+.js .show-pin { position: sticky; top: 0; height: 100svh; display: grid; align-items: center; }
+.js .sheet-stage .sheet > [data-ui] { transform: translateY(var(--fit-dy, 0px)) scale(var(--fit, 1)); transform-origin: top center; }
 .showcase .sheet-stage { grid-column: 1 / span 6; grid-row: 1; background: var(--surface-2); height: var(--stage-h, clamp(480px, 66svh, 620px)); position: relative; overflow: hidden; }
 .showcase .index { grid-column: 8 / span 5; grid-row: 1; align-self: center; display: grid; gap: 2.5rem; }
 .showcase .index ul { display: grid; gap: 0.25rem; }
@@ -256,11 +260,40 @@ p + p { margin-top: 0.9em; }
   .split-col { order: 2; position: static; }
   .split-photo { position: relative; top: 0; margin: 12px; height: 58svh; }
   .hero-top { position: absolute; top: 12px; left: 12px; right: 12px; padding: 16px; display: flex; justify-content: flex-end; }
-  .nav ul { display: none; }
-  .nav-menu { display: block; position: relative; }
-  .nav-menu summary { list-style: none; cursor: pointer; min-height: 44px; display: flex; align-items: center; padding: 0 1rem; background: var(--bg); }
-  .nav-menu summary::-webkit-details-marker { display: none; }
-  .nav-menu ul { display: grid; gap: 0.75rem; position: absolute; right: 0; top: 100%; background: var(--surface-2); padding: 1rem 1.25rem; min-width: 12rem; }
+  .nav ul:not(.menu-links), .bar .nav-action { display: none; }
+  /* phone menu: a full-screen sheet in the closing field's green, opened by a plain text button */
+  .menu { display: block; }
+  .menu-toggle {
+    list-style: none; cursor: pointer; position: relative; z-index: 31;
+    min-height: 44px; padding: 0 1.1rem; display: inline-flex; align-items: center;
+    background: var(--bg); color: var(--ink); font-size: 1rem;
+    transition: background-color var(--t-ui) ease, color var(--t-ui) ease;
+  }
+  .menu-toggle::-webkit-details-marker { display: none; }
+  .menu-toggle:active { transform: scale(0.97); }
+  .menu .when-open { display: none; }
+  .menu[open] .when-open { display: inline; }
+  .menu[open] .when-closed { display: none; }
+  .menu[open] .menu-toggle { position: fixed; top: 24px; right: var(--margin); background: var(--field-ink); color: var(--field); }
+  .menu-sheet {
+    position: fixed; inset: 0; z-index: 30; background: var(--field); color: var(--field-ink);
+    display: grid; grid-template-rows: auto 1fr auto; padding: 24px var(--margin) calc(28px + env(safe-area-inset-bottom));
+    overflow-y: auto;
+  }
+  /* closed: no box at all, so nothing invisible ever sits over the page */
+  .menu:not([open]) .menu-sheet { display: none; }
+  .menu-mark { font-size: 1.5rem; letter-spacing: -0.03em; line-height: 44px; text-decoration: none; color: inherit; }
+  .menu-sheet nav { align-self: center; }
+  .nav .menu-links { display: grid; gap: 0.35rem; }
+  .menu-links a { display: block; padding: 0.2em 0; font-size: var(--step-head); line-height: 1.05; letter-spacing: -0.03em; text-decoration: none; color: inherit; }
+  .menu-foot { display: grid; gap: 1rem; }
+  .menu-action {
+    display: flex; align-items: center; justify-content: center; min-height: 56px;
+    background: var(--field-ink); color: var(--field); font-weight: 500; text-decoration: none;
+  }
+  .menu-action:active { transform: scale(0.98); }
+  .menu-note { color: var(--field-muted); text-decoration: none; text-align: center; }
+  html.menu-open { overflow: hidden; }
   .wordmark { position: relative; top: auto; right: auto; transform: none; margin: 0.75rem 0 0 var(--margin); font-size: var(--wm-size-phone, 21vw); }
   .hero-text { height: auto; padding: 1.5rem var(--margin) 0; }
   .hero-text .statement { font-size: 1.0625rem; max-width: 34ch; }
@@ -287,6 +320,13 @@ p + p { margin-top: 0.9em; }
   /* the sheets share one grid cell, so the stage is exactly as tall as the tallest one: nothing is cut off */
   .showcase .sheet-stage { grid-row: 2; height: auto; display: grid; padding: 24px 12px; margin-inline: calc(var(--margin) * -1); }
   .showcase .sheet-stage .ui-note { position: static; grid-area: 2 / 1; margin-top: 14px; text-align: center; }
+  /* phone, pinned: names and note on top, the stage takes the rest; the ticket is scaled to fit (site.ts) */
+  .js .show-pin { align-items: stretch; grid-template-rows: minmax(0, 1fr); }
+  .js .showcase .grid { height: 100%; grid-template-rows: auto minmax(0, 1fr); align-content: stretch; }
+  .js .showcase .index { margin-bottom: 0; padding: 1rem 0 0.75rem; gap: 0.75rem; align-self: start; }
+  .js .showcase .index .note { min-height: 0; }
+  .js .showcase .sheet-stage { height: 100%; min-height: 0; display: grid; align-items: start; padding: 12px 12px calc(var(--note-h, 18px) + 20px); }
+  .js .showcase .sheet-stage .ui-note { position: absolute; left: 12px; right: 12px; bottom: 10px; margin: 0; }
   .sheet { grid-area: 1 / 1; position: relative; top: auto; left: auto; justify-self: center; }
   /* the heading and its sentence lead; the picture follows as a band, the list scrolls after it */
   .cats .rows { display: contents; }
@@ -323,6 +363,12 @@ p + p { margin-top: 0.9em; }
   }
 }
 @keyframes rise { to { opacity: 1; transform: none; } }
+@keyframes sheet-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+@keyframes menu-item { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .menu[open] .menu-sheet { animation: sheet-in 420ms var(--ease-in-out); }
+  .menu[open] .menu-links li, .menu[open] .menu-foot { animation: menu-item 600ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms + 180ms); }
+}
 @keyframes line-up { to { transform: none; } }
 @keyframes drift { from { transform: scale(1.02); } to { transform: scale(1.1) translateX(-1.5%); } }
 @keyframes wm-scale { to { transform: scale(0.93); } }

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/ui.css';
 import { SITE, abs } from '../config/site';
 import Footer from '../components/Footer.astro';
+import MobileMenu from '../components/MobileMenu.astro';
 
 interface Props {
   title: string;
@@ -71,6 +72,15 @@ const ogImage = abs('/og.jpg');
             <li><a class="link" href="/merchants">İşletmeler</a></li>
           </ul>
           <a class="nav-action link" href="/#indir">Uygulamayı indir</a>
+          <MobileMenu
+            links={[
+              { href: '/', label: 'Uygulama' },
+              { href: '/merchants', label: 'İşletmeler' },
+              { href: '/terms', label: 'Kullanım Koşulları' },
+              { href: '/privacy', label: 'Gizlilik' },
+            ]}
+            action={{ href: '/#indir', label: 'Uygulamayı indir' }}
+          />
         </nav>
       </header>
     )}
