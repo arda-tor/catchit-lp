@@ -12,8 +12,8 @@ export const home: MarketingPage = {
     statement: 'Yakınındaki dükkânların o saate özel kampanyaları. Yakala, kodu kasada göster.',
     action: { label: 'Uygulamayı indir', href: '#indir' },
     secondary: { label: 'İşletmeler için', href: '/merchants' },
-    photo: 'pazar-sebze',
-    photoAlt: 'Bir hafta pazarında tezgâha dizilmiş havuç demetleri, karnabahar, pırasa ve yeşillikler',
+    photo: 'restoran-masa',
+    photoAlt: 'Botanik desenli duvarın önünde beyaz örtülü, kadehleri ve çiçeğiyle kurulmuş bir restoran masası ve yeşil kadife sandalyeler',
   },
   intro: {
     heading: 'Saat saat değişen fırsatlar',

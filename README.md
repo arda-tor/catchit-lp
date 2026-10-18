@@ -52,7 +52,7 @@ Tasarım `.agents/skills/design-taste-frontend` skill'iyle yapıldı. Çekilen y
 
 ### Fotoğraflar
 
-`public/photos/` altındaki fotoğraflar Avrupa şehirlerinden (Karlsruhe, Toulouse, Paris, Monschau, Münster), Wikimedia Commons'tan ticari kullanıma izin veren lisanslarla alındı. Kaynakları `src/data/photos.json` içinde ve her sayfanın footer'ında otomatik olarak gösteriliyor. CatchIt'e ya da bir müşteri işletmeye ait değiller. Gerçek fotoğraflar gelince değiştirin ve `photos.json` dosyasını güncelleyin.
+`public/photos/` altındaki fotoğraflar Avrupa şehirlerinden (Toulouse, Paris, Monschau, Münster), Wikimedia Commons'tan ticari kullanıma izin veren lisanslarla alındı. Kaynakları `src/data/photos.json` içinde ve her sayfanın footer'ında otomatik olarak gösteriliyor. CatchIt'e ya da bir müşteri işletmeye ait değiller. Gerçek fotoğraflar gelince değiştirin ve `photos.json` dosyasını güncelleyin.
 
 ### Örnek içerik
 
